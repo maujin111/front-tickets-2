@@ -8,7 +8,7 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
 
-import { Action, ListItem } from "@/interfaces"
+import { Action, ListItem, Priority } from "@/interfaces"
 import { ScrollArea } from "../ui/scroll-area"
 import {
   Item,
@@ -27,6 +27,7 @@ type ListProps = {
   ListIcon: LucideIcon
   ListAction: (id: number) => void
   actions: Action[]
+  priorities: Priority[]
 }
 
 export function Listas({
@@ -34,32 +35,39 @@ export function Listas({
   ListIcon,
   ListAction,
   actions,
+  priorities,
 }: ListProps) {
   return (
     <ScrollArea>
       <ItemGroup>
-        {ItemListData.map((item) => (
-          <ContextMenu key={item.id}>
-            <ContextMenuTrigger asChild>
-              <Item
-                variant="outline"
-                className="cursor-pointer transition-colors hover:border-transparent hover:bg-muted/50"
-                onClick={() => ListAction(item.id)}
-              >
-                <ItemMedia variant="icon">
-                  <ListIcon />
-                </ItemMedia>
-                <ItemContent>
-                  <ItemTitle>
-                    {" "}
-                    #{item.id} {item.titulo}
-                  </ItemTitle>
-                  <ItemDescription>{item.subtitulo}</ItemDescription>
-                </ItemContent>
-                <ItemActions>
-                  <BotonMenuActions actions={actions} item={item} />
-                </ItemActions>
-              </Item>
+        {ItemListData.map((item) => {
+          const priority = priorities.find((p) => p.id === item.priorityId)
+          const borderColor = priority
+            ? priority.color.replace("bg-", "border-")
+            : "border-border"
+
+          return (
+            <ContextMenu key={item.id}>
+              <ContextMenuTrigger asChild>
+                <Item
+                  variant="outline"
+                  className={`cursor-pointer hover:border-transparent hover:bg-muted/50 shadow-sm border-l-4 ${borderColor}`}
+                  onClick={() => ListAction(item.id)}
+                >
+                  <ItemMedia variant="icon">
+                    <ListIcon />
+                  </ItemMedia>
+                  <ItemContent>
+                    <ItemTitle>
+                      {" "}
+                      #{item.id} {item.titulo}
+                    </ItemTitle>
+                    <ItemDescription>{item.subtitulo}</ItemDescription>
+                  </ItemContent>
+                  <ItemActions>
+                    <BotonMenuActions actions={actions} item={item} />
+                  </ItemActions>
+                </Item>
             </ContextMenuTrigger>
             <ContextMenuContent className="w-48">
               <ContextMenuGroup>
@@ -75,7 +83,8 @@ export function Listas({
               </ContextMenuGroup>
             </ContextMenuContent>
           </ContextMenu>
-        ))}
+        )
+      })}
       </ItemGroup>
     </ScrollArea>
   )

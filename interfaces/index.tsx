@@ -5,6 +5,7 @@ export interface ListItem {
   titulo: string
   subtitulo: string
   tabId: number
+  priorityId: number
 }
 
 export interface Action {
@@ -15,12 +16,17 @@ export interface Action {
 }
 
 export interface TabItems {
-  id: number,
+  id: number
   label: string
 }
 
-export interface BasicActions {
-
-}
+export interface BasicActions {}
 
 export type OrderBy = keyof ListItem
+
+export interface Priority {
+  id: number
+  label: string
+  color: string
+  value: string
+}
