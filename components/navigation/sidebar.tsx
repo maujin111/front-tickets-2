@@ -28,33 +28,52 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { NavMain } from "./nav-main"
+import { NavMain } from "./nav-main-enhanced"
 
-// This is sample data.
-const data = {
-  user: {
-    name: "Mauricio Ordoñez",
-    email: "@maujin",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  teams: [
-    {
-      name: "Sistema de tickets",
-      logo: GalleryVerticalEnd,
-      plan: "Anfibius",
+type Agent = {
+  title: string
+  url: string
+  isActive?: boolean
+}
+
+type AreaWithAgents = {
+  title: string
+  url: string
+  items: Agent[]
+}
+
+type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
+  agentsByArea?: AreaWithAgents[]
+}
+
+export function AppSidebar({ agentsByArea = [], ...props }: AppSidebarProps) {
+  const data = {
+    user: {
+      name: "Mauricio Ordoñez",
+      email: "@maujin",
+      avatar: "/avatars/shadcn.jpg",
     },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
-  navMain: [
+    teams: [
+      {
+        name: "Sistema de tickets",
+        logo: GalleryVerticalEnd,
+        plan: "Anfibius",
+      },
+      {
+        name: "Acme Corp.",
+        logo: AudioWaveform,
+        plan: "Startup",
+      },
+      {
+        name: "Evil Corp.",
+        logo: Command,
+        plan: "Free",
+      },
+    ],
+  }
+
+  // Construir el menú de navegación con los agentes dinámicos
+  const navMain = [
     {
       title: "Soporte Técnico",
       url: "#",
@@ -64,6 +83,7 @@ const data = {
         {
           title: "Tickets",
           url: "/home/soporte/tickets",
+          items: agentsByArea.length > 0 ? agentsByArea : undefined,
         },
         {
           title: "Visitas",
@@ -155,17 +175,15 @@ const data = {
         },
       ],
     },
-  ],
-}
+  ]
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={navMain} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

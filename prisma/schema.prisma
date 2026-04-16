@@ -1,0 +1,1078 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../prisma/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model FEDIA_ASIG {
+  FEASIG_IDEN Int       @id @default(autoincrement())
+  FEASIG_FASI DateTime? @db.DateTime(0)
+  SECLAV_CODA Int?
+  SECLAV_CODR Int?
+  PEETAP_IDEN Int?
+  FECONV_IDEN Int?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model FEDIA_CITA {
+  FECITA_IDEN Int         @id @default(autoincrement())
+  FECLIE_IDEN Int?
+  SECLAV_CODI Int?
+  FECITA_FINI DateTime?   @db.DateTime(0)
+  FECITA_FFIN DateTime?   @db.DateTime(0)
+  PEORIN_IDEN Int?
+  PETARE_IDEN Int?
+  FECITA_FDET String?     @db.Text
+  FECITA_FOBS String?     @db.Text
+  FECITA_ESTA String?     @db.Text
+  FECITA_PROG String?     @db.VarChar(250)
+  FECITA_SUPE Boolean?
+  FECITA_EMPR String?     @db.Text
+  FECITA_VISI String?     @db.VarChar(45)
+  PECITA_IDPC Int?
+  PEPROY_IDEN Int?        @default(6)
+  FEDIA_CLIE  FEDIA_CLIE? @relation(fields: [FECLIE_IDEN], references: [FECLIE_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "FEDIA_CITA_ibfk_1")
+  SEDIA_CLAV  SEDIA_CLAV? @relation(fields: [SECLAV_CODI], references: [SECLAV_CODI], onDelete: Restrict, onUpdate: Restrict, map: "FEDIA_CITA_ibfk_2")
+  PEDIA_TARE  PEDIA_TARE? @relation(fields: [PETARE_IDEN], references: [PETARE_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "FEDIA_CITA_ibfk_3")
+  PEDIA_ORIN  PEDIA_ORIN? @relation(fields: [PEORIN_IDEN], references: [PEORIN_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "FEDIA_CITA_ibfk_4")
+
+  @@index([FECLIE_IDEN], map: "FECLIE_IDEN")
+  @@index([PEORIN_IDEN], map: "PEORIN_IDEN")
+  @@index([PETARE_IDEN], map: "PETARE_IDEN")
+  @@index([SECLAV_CODI], map: "SECLAV_CODI")
+}
+
+model FEDIA_CLIE {
+  FECLIE_IDEN Int          @id @default(autoincrement())
+  FECLIE_CODC String?      @unique(map: "UQ__FEDIA_CL__8EDD25561E97DBC5") @db.VarChar(15)
+  FECLIE_NOMC String?      @db.VarChar(100)
+  FECLIE_APEC String?      @db.VarChar(100)
+  FECLIE_EMAI String?      @db.VarChar(100)
+  FECLIE_TELF Int?
+  FECLIE_ESTA String?      @db.Char(1)
+  FECLIE_CLAV String?      @db.VarChar(500)
+  FECLIE_VIP  Boolean?
+  FEDIA_CITA  FEDIA_CITA[]
+  FEDIA_CONV  FEDIA_CONV[]
+  FEDIA_REEN  FEDIA_REEN[]
+  PEDIA_DUSU  PEDIA_DUSU[]
+  PEDIA_EQUI  PEDIA_EQUI[]
+  PEDIA_VISI  PEDIA_VISI[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model FEDIA_CONV {
+  FECONV_IDEN  Int          @id @default(autoincrement())
+  FECLIE_IDEN  Int?
+  FECONV_ALTA  DateTime?    @db.Date
+  FECONV_HORA  String?      @db.Char(5)
+  SECLAV_CODI  Int?
+  FECONV_SCCA  String?      @db.VarChar(20)
+  FECONV_CONT  String?      @db.VarChar(50)
+  FECONV_DETA  String?      @db.VarChar(100)
+  PETCVE_IDEN  Int?
+  FECONV_CALI  String?      @db.Char(1)
+  FECONV_METPR String?      @db.VarChar(20)
+  FECONV_ESTA  String?      @db.Char(1)
+  FECONV_EMPR  String?      @db.VarChar(50)
+  FECONV_TELF  String?      @db.VarChar(15)
+  FECONV_COME  String?      @db.VarChar(150)
+  PEORIN_IDEN  Int?
+  FECONV_TVEQ  String?      @db.VarChar(200)
+  FECONV_FASI  DateTime?    @db.DateTime(0)
+  FECONV_FINI  DateTime?    @db.DateTime(0)
+  FECONV_FFIN  DateTime?    @db.DateTime(0)
+  PEETAP_IDEN  Int?
+  SECLAV_CODC  Int?
+  FECONV_FCAL  DateTime?    @db.Timestamp(0)
+  FECONV_SOLU  String?      @db.LongText
+  FECONV_PRIO  Int?
+  FECONV_ISBUG Boolean?
+  FEDIA_CLIE   FEDIA_CLIE?  @relation(fields: [FECLIE_IDEN], references: [FECLIE_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "FK__FEDIA_CON__FECLI__6B24EA82")
+  PEDIA_ORIN   PEDIA_ORIN?  @relation(fields: [PEORIN_IDEN], references: [PEORIN_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "FK__FEDIA_CON__PEORI__6D0D32F4")
+  SEDIA_CLAV   SEDIA_CLAV?  @relation(fields: [SECLAV_CODI], references: [SECLAV_CODI], onDelete: Restrict, onUpdate: Restrict, map: "FK__FEDIA_CON__SECLA__6C190EBB")
+  FEDIA_DCNV   FEDIA_DCNV[]
+
+  @@index([FECLIE_IDEN], map: "FK__FEDIA_CON__FECLI__6B24EA82")
+  @@index([PEORIN_IDEN], map: "FK__FEDIA_CON__PEORI__6D0D32F4")
+  @@index([SECLAV_CODI], map: "FK__FEDIA_CON__SECLA__6C190EBB")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model FEDIA_DCNV {
+  FEDCNV_IDEN Int         @id @default(autoincrement())
+  FEDCNV_DETA String?     @db.VarChar(1500)
+  FEDCNV_FECH DateTime?   @db.Date
+  FEDCNV_HORA String?     @db.Char(8)
+  SECLAV_CODI Int?
+  FECONV_IDEN Int?
+  FEDCNV_TIPO String?     @db.VarChar(4)
+  FEDCNV_ESTA Int?
+  FEDIA_CONV  FEDIA_CONV? @relation(fields: [FECONV_IDEN], references: [FECONV_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "FK__FEDIA_DCN__FECON__70DDC3D8")
+  SEDIA_CLAV  SEDIA_CLAV? @relation(fields: [SECLAV_CODI], references: [SECLAV_CODI], onDelete: Restrict, onUpdate: Restrict, map: "FK__FEDIA_DCN__SECLA__6FE99F9F")
+
+  @@index([FECONV_IDEN], map: "FK__FEDIA_DCN__FECON__70DDC3D8")
+  @@index([SECLAV_CODI], map: "FK__FEDIA_DCN__SECLA__6FE99F9F")
+}
+
+model FEDIA_ECON {
+  FEECON_IDEN Int       @id @default(autoincrement())
+  FEECON_FECH DateTime? @db.Date
+  FEECON_DETA String?   @db.VarChar(1000)
+  FECLIE_IDEN Int?
+  SECLAV_CODI Int?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model FEDIA_ENCA {
+  FEEC_IDEN  Int          @id @default(autoincrement())
+  FEEC_NOMB  String?      @db.VarChar(1000)
+  FEEC_DESC  String?      @db.VarChar(1000)
+  FEEC_FECH  DateTime?    @db.Date
+  FEEC_ESTA  Boolean?
+  PETI_IDEN  Int?
+  FEEC_DIRA  Int?
+  PEDIA_TIEN PEDIA_TIEN?  @relation(fields: [PETI_IDEN], references: [PETI_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "FEDIA_ENCA_ibfk_1")
+  FEDIA_REEN FEDIA_REEN[]
+  PEDIA_PREN PEDIA_PREN[]
+
+  @@index([PETI_IDEN], map: "PETI_IDEN")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model FEDIA_REDE {
+  FERE_IDEN  Int         @id @default(autoincrement())
+  FERC_IDEN  Int?
+  FERE_VALO  String?     @db.VarChar(1000)
+  PEPR_IDEN  Int?
+  FEDIA_REEN FEDIA_REEN? @relation(fields: [FERC_IDEN], references: [FERC_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "FEDIA_REDE_ibfk_1")
+  PEDIA_PREN PEDIA_PREN? @relation(fields: [PEPR_IDEN], references: [PEPR_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "FEDIA_REDE_ibfk_2")
+
+  @@index([FERC_IDEN], map: "FERC_IDEN")
+  @@index([PEPR_IDEN], map: "PEPR_IDEN")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model FEDIA_REEN {
+  FERC_IDEN   Int          @id @default(autoincrement())
+  FECLIE_IDEN Int?
+  FERC_FECH   DateTime?    @db.DateTime(0)
+  FERC_DOCU   Int?
+  FEEC_IDEN   Int?
+  FERC_TECN   String?      @db.VarChar(1000)
+  FERC_CLIE   String?      @db.VarChar(1000)
+  FEDIA_REDE  FEDIA_REDE[]
+  FEDIA_CLIE  FEDIA_CLIE?  @relation(fields: [FECLIE_IDEN], references: [FECLIE_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "FEDIA_REEN_ibfk_1")
+  FEDIA_ENCA  FEDIA_ENCA?  @relation(fields: [FEEC_IDEN], references: [FEEC_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "FEDIA_REEN_ibfk_2")
+
+  @@index([FECLIE_IDEN], map: "FECLIE_IDEN")
+  @@index([FEEC_IDEN], map: "FEEC_IDEN")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model FEDIA_TIDO {
+  FETIDO_IDEN  Int          @id @default(autoincrement())
+  FETIDO_NOMB  String       @unique(map: "FETIDO_NOMB") @db.VarChar(100)
+  FETIDO_PLAN  String?      @db.Text
+  FETIDO_COMEN String?      @db.Text
+  FETIDO_ESTA  Boolean?     @default(true)
+  FETIDO_ENCA  Boolean?     @default(true)
+  PEDIA_DOCU   PEDIA_DOCU[]
+}
+
+model PEDIA_ACTRA {
+  PEACTR_IDEN                                    Int         @id @default(autoincrement())
+  PEACTR_NOMB                                    String?     @db.VarChar(1000)
+  PEACTR_ESTA                                    Int?
+  PEACTR_NOTA                                    String?     @db.VarChar(10000)
+  PEACTR_FECH                                    DateTime?   @db.Date
+  PEACTR_FFIN                                    String?     @db.VarChar(255)
+  PEACTR_PRIO                                    Int?
+  PEACTR_PORC                                    Int?
+  SECLAV_CODI                                    Int?
+  SECLAV_ASIG                                    Int?
+  SEDIA_CLAV_PEDIA_ACTRA_SECLAV_CODIToSEDIA_CLAV SEDIA_CLAV? @relation("PEDIA_ACTRA_SECLAV_CODIToSEDIA_CLAV", fields: [SECLAV_CODI], references: [SECLAV_CODI], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_ACTRA_ibfk_1")
+  SEDIA_CLAV_PEDIA_ACTRA_SECLAV_ASIGToSEDIA_CLAV SEDIA_CLAV? @relation("PEDIA_ACTRA_SECLAV_ASIGToSEDIA_CLAV", fields: [SECLAV_ASIG], references: [SECLAV_CODI], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_ACTRA_ibfk_2")
+
+  @@index([SECLAV_ASIG], map: "SECLAV_ASIG")
+  @@index([SECLAV_CODI], map: "SECLAV_CODI")
+}
+
+model PEDIA_AREA {
+  PEAREA_IDEN Int          @id @default(autoincrement())
+  PEAREA_NOMA String?      @db.VarChar(255)
+  PEDIA_RESP  PEDIA_RESP[]
+}
+
+model PEDIA_ASIS {
+  PEASIS_IDEN  Int         @id @default(autoincrement())
+  PEEVEN_IDEN  Int?
+  PEASIS_NOMB  String?     @db.VarChar(255)
+  PEASIS_APELL String?     @db.VarChar(255)
+  PEASIS_CEDU  BigInt?
+  PEASIS_TELE  String?     @db.VarChar(50)
+  PEASIS_CORR  String?     @db.VarChar(255)
+  PEASIS_EMPE  Boolean?
+  PEASIS_EMNOM String?     @db.VarChar(255)
+  PEASIS_NUSO  Int?
+  PESIS_ESTADO Int?
+  PEPRES_CANT  String?     @db.VarChar(300)
+  PEASIS_CANT  String?     @db.VarChar(500)
+  PEASIS_DIRE  String?     @db.VarChar(500)
+  PEDIA_EVEN   PEDIA_EVEN? @relation(fields: [PEEVEN_IDEN], references: [PEEVEN_IDEN], onDelete: Cascade, onUpdate: Restrict, map: "PEDIA_ASIS_ibfk_1")
+
+  @@index([PEEVEN_IDEN], map: "PEEVEN_IDEN")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_ATTACHMENT {
+  PEADJU_IDEN Int         @id @default(autoincrement())
+  PECARD_IDEN Int?
+  PEADJU_NOMB String?     @db.VarChar(255)
+  PEADJU_RUTA String?     @db.Text
+  PEADJU_TIPO String?     @db.VarChar(100)
+  PEADJU_TAMA BigInt?
+  SECLAV_CODI Int?
+  PEADJU_CREA DateTime?   @db.DateTime(0)
+  PEADJU_ESTA Int?        @default(1)
+  PEADJU_DESC String?     @db.Text
+  PEDIA_CARD  PEDIA_CARD? @relation(fields: [PECARD_IDEN], references: [PECARD_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_ATTACHMENT_ibfk_1")
+
+  @@index([PEADJU_ESTA], map: "idx_pedia_attachment_estado")
+  @@index([PECARD_IDEN], map: "idx_pedia_attachment_tarjeta")
+  @@index([SECLAV_CODI], map: "idx_pedia_attachment_usuario")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_BIGDE {
+  PEBUGD_IDEN Int          @id @default(autoincrement())
+  PEENBU_IDEN Int?
+  PEBUGD_DESC String?      @db.LongText
+  SECLAV_CODI Int?
+  PEBUGD_CREA DateTime?    @db.DateTime(0)
+  PEBUGD_ESTA Int?
+  PEBUGD_ADJU String?      @db.Text
+  PEBUGD_TIPO Int?
+  PEBUGD_TICK Int?
+  SEDIA_CLAV  SEDIA_CLAV?  @relation(fields: [SECLAV_CODI], references: [SECLAV_CODI], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_BIGDE_ibfk_1")
+  PEDIA_ENBUG PEDIA_ENBUG? @relation(fields: [PEENBU_IDEN], references: [PEENBU_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_BIGDE_ibfk_2")
+
+  @@index([PEENBU_IDEN], map: "PEENBU_IDEN")
+  @@index([SECLAV_CODI], map: "SECLAV_CODI")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_BUGPA {
+  PEBUGP_IDEN Int          @id @default(autoincrement())
+  PEENBU_IDEN Int?
+  SECLAV_CODI Int?
+  PEBUGP_CREA DateTime?    @db.DateTime(0)
+  PEDIA_ENBUG PEDIA_ENBUG? @relation(fields: [PEENBU_IDEN], references: [PEENBU_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_BUGPA_ibfk_1")
+  SEDIA_CLAV  SEDIA_CLAV?  @relation(fields: [SECLAV_CODI], references: [SECLAV_CODI], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_BUGPA_ibfk_2")
+
+  @@index([PEENBU_IDEN], map: "PEENBU_IDEN")
+  @@index([SECLAV_CODI], map: "SECLAV_CODI")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_CARD {
+  PECARD_IDEN      Int                @id @default(autoincrement())
+  PELIST_IDEN      Int?
+  PECARD_NOMB      String?            @db.MediumText
+  PECARD_DESC      String?            @db.MediumText
+  PECARD_CREA      DateTime?          @db.DateTime(0)
+  PECARD_LIMT      DateTime?          @db.DateTime(0)
+  PECARD_ESTA      Int?
+  PECARD_COLO      String?            @db.VarChar(250)
+  PECARD_ETIQ      Int?
+  PECARD_ADJU      String?            @db.MediumText
+  PECARD_USLI      String?            @db.MediumText
+  PECARD_USPAR     String?            @db.MediumText
+  PECARD_ORDE      Int?               @default(0)
+  PECARD_PRIO      Int?               @default(2)
+  PEDIA_ATTACHMENT PEDIA_ATTACHMENT[]
+  PEDIA_LIST       PEDIA_LIST?        @relation(fields: [PELIST_IDEN], references: [PELIST_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_CARD_ibfk_1")
+  PEDIA_CARD_LABEL PEDIA_CARD_LABEL[]
+  PEDIA_COMMENT    PEDIA_COMMENT[]
+
+  @@index([PECARD_ESTA], map: "idx_pedia_card_estado")
+  @@index([PECARD_LIMT], map: "idx_pedia_card_fecha_limite")
+  @@index([PELIST_IDEN], map: "idx_pedia_card_lista")
+  @@index([PECARD_ORDE], map: "idx_pedia_card_orden")
+  @@index([PECARD_PRIO], map: "idx_pedia_card_prioridad")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_CARD_LABEL {
+  PECALA_IDEN Int          @id @default(autoincrement())
+  PECARD_IDEN Int?
+  PELABL_IDEN Int?
+  PECALA_CREA DateTime?    @db.DateTime(0)
+  SECLAV_CODI Int?
+  PEDIA_CARD  PEDIA_CARD?  @relation(fields: [PECARD_IDEN], references: [PECARD_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_CARD_LABEL_ibfk_1")
+  PEDIA_LABEL PEDIA_LABEL? @relation(fields: [PELABL_IDEN], references: [PELABL_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_CARD_LABEL_ibfk_2")
+
+  @@unique([PECARD_IDEN, PELABL_IDEN], map: "unique_card_label")
+  @@index([PELABL_IDEN], map: "PELABL_IDEN")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_CARG {
+  PECAR_IDEN  Int          @id @default(autoincrement())
+  PECAR_NOMB  String       @db.VarChar(255)
+  PECAR_NIVEL Int
+  PECAR_ESTA  Boolean      @default(true)
+  PEDIV_IDEN  Int
+  PEDIA_DIVS  PEDIA_DIVS   @relation(fields: [PEDIV_IDEN], references: [PEDIV_IDEN], map: "fk_pedia_carg_divs")
+  SEDIA_CARG  SEDIA_CARG[]
+
+  @@index([PEDIV_IDEN], map: "fk_pedia_carg_divs")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_COMMENT {
+  PECOMM_IDEN Int         @id @default(autoincrement())
+  PECARD_IDEN Int?
+  SECLAV_CODI Int?
+  PECOMM_TEXT String?     @db.MediumText
+  PECOMM_CREA DateTime?   @db.DateTime(0)
+  PECOMM_ACTU DateTime?   @db.DateTime(0)
+  PECOMM_ESTA Int?        @default(1)
+  PEDIA_CARD  PEDIA_CARD? @relation(fields: [PECARD_IDEN], references: [PECARD_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_COMMENT_ibfk_1")
+
+  @@index([PECOMM_CREA], map: "idx_pedia_comment_fecha")
+  @@index([PECARD_IDEN], map: "idx_pedia_comment_tarjeta")
+  @@index([SECLAV_CODI], map: "idx_pedia_comment_usuario")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_CTREP {
+  PECTREP_IDEN Int      @id @default(autoincrement())
+  PECTREP_NOMB String?  @db.VarChar(1000)
+  PECTREP_ESTA Boolean?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_DEDO {
+  PEDEDO_IDEN Int        @id @default(autoincrement())
+  PEDOCU_IDEN Int
+  PEDEDO_CONT String?    @db.Text
+  PEDIA_DOCU  PEDIA_DOCU @relation(fields: [PEDOCU_IDEN], references: [PEDOCU_IDEN], onUpdate: Restrict, map: "PEDIA_DEDO_ibfk_1")
+
+  @@index([PEDOCU_IDEN], map: "idx_documento")
+}
+
+model PEDIA_DETA {
+  PEDETA_IDEN   Int      @id @default(autoincrement())
+  PEDETA_DESC   String?  @db.Text
+  PEDETA_ESTADO Boolean?
+  PEDETA_ETAP   Int?
+  PEPROY_IDEN   Int?     @default(6)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_DIVS {
+  PEDIV_IDEN Int          @id @default(autoincrement())
+  PEDIV_NOMB String       @db.VarChar(255)
+  PEDIV_ESTA Boolean      @default(true)
+  PEDIA_CARG PEDIA_CARG[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_DOCU {
+  PEDOCU_IDEN                                   Int                     @id @default(autoincrement())
+  PEDOCU_TITU                                   String?                 @db.VarChar(255)
+  PEDOCU_ESTA                                   PEDIA_DOCU_PEDOCU_ESTA
+  SECLAV_ENVI                                   Int
+  SECLAV_RECI                                   Int
+  FETIDO_IDEN                                   Int
+  PEDOCU_FECHA                                  DateTime?               @db.Date
+  PEDOCU_READ                                   PEDIA_DOCU_PEDOCU_READ? @default(no_leido)
+  PEDOCU_NOMB                                   String?                 @db.VarChar(255)
+  PEDOCU_REIDE                                  Int?
+  PEDOCU_QRB64                                  String?                 @db.LongText
+  created_at                                    DateTime?               @default(now()) @db.DateTime(0)
+  updated_at                                    DateTime?               @default(now()) @db.DateTime(0)
+  PEDOCU_ARCHIVO                                String?                 @db.VarChar(500)
+  PEDIA_DEDO                                    PEDIA_DEDO[]
+  FEDIA_TIDO                                    FEDIA_TIDO              @relation(fields: [FETIDO_IDEN], references: [FETIDO_IDEN], onUpdate: Restrict, map: "PEDIA_DOCU_ibfk_1")
+  SEDIA_CLAV_PEDIA_DOCU_SECLAV_ENVIToSEDIA_CLAV SEDIA_CLAV              @relation("PEDIA_DOCU_SECLAV_ENVIToSEDIA_CLAV", fields: [SECLAV_ENVI], references: [SECLAV_CODI], onUpdate: Restrict, map: "PEDIA_DOCU_ibfk_2")
+  SEDIA_CLAV_PEDIA_DOCU_SECLAV_RECIToSEDIA_CLAV SEDIA_CLAV              @relation("PEDIA_DOCU_SECLAV_RECIToSEDIA_CLAV", fields: [SECLAV_RECI], references: [SECLAV_CODI], onUpdate: Restrict, map: "PEDIA_DOCU_ibfk_3")
+  PEDIA_DOCU                                    PEDIA_DOCU?             @relation("PEDIA_DOCUToPEDIA_DOCU", fields: [PEDOCU_REIDE], references: [PEDOCU_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_DOCU_ibfk_4")
+  other_PEDIA_DOCU                              PEDIA_DOCU[]            @relation("PEDIA_DOCUToPEDIA_DOCU")
+  PEDIA_DOCU_COPIA                              PEDIA_DOCU_COPIA[]
+
+  @@index([FETIDO_IDEN], map: "FETIDO_IDEN")
+  @@index([PEDOCU_REIDE], map: "PEDOCU_REIDE")
+  @@index([SECLAV_ENVI], map: "SECLAV_ENVI")
+  @@index([SECLAV_RECI], map: "SECLAV_RECI")
+  @@index([PEDOCU_ESTA], map: "idx_estado")
+  @@index([PEDOCU_FECHA], map: "idx_fecha")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_DOCU_COPIA {
+  DOCU_COPIA_ID Int        @id @default(autoincrement())
+  PEDOCU_IDEN   Int
+  SECLAV_CODI   Int
+  PEDIA_DOCU    PEDIA_DOCU @relation(fields: [PEDOCU_IDEN], references: [PEDOCU_IDEN], onUpdate: Restrict, map: "PEDIA_DOCU_COPIA_ibfk_1")
+  SEDIA_CLAV    SEDIA_CLAV @relation(fields: [SECLAV_CODI], references: [SECLAV_CODI], onUpdate: Restrict, map: "PEDIA_DOCU_COPIA_ibfk_2")
+
+  @@unique([PEDOCU_IDEN, SECLAV_CODI], map: "unique_copia")
+  @@index([SECLAV_CODI], map: "SECLAV_CODI")
+}
+
+model PEDIA_DUSU {
+  PEDUSU_IDEN Int         @id @default(autoincrement())
+  SECLAV_CODI Int?
+  PEDUSU_NOMB String?     @db.VarChar(200)
+  PEDUSU_APEL String?     @db.VarChar(200)
+  PEDUSU_NIVE Int?
+  PEDUSU_DETA String?     @db.VarChar(1000)
+  FECLIE_IDEN Int?
+  SEDIA_CLAV  SEDIA_CLAV? @relation(fields: [SECLAV_CODI], references: [SECLAV_CODI], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_DUSU_ibfk_1")
+  FEDIA_CLIE  FEDIA_CLIE? @relation(fields: [FECLIE_IDEN], references: [FECLIE_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_DUSU_ibfk_2")
+
+  @@index([FECLIE_IDEN], map: "FECLIE_IDEN")
+  @@index([SECLAV_CODI], map: "SECLAV_CODI")
+}
+
+model PEDIA_DVET {
+  PEDVET_IDEN Int  @id @default(autoincrement())
+  PEVISI_IDEN Int?
+  PEDETA_IDEN Int?
+  PEDVET_RESU Int?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_EMPR {
+  PEEMPR_IDEN    Int      @id
+  PEEMPR_NOMB    String?  @db.VarChar(50)
+  PEEMPR_CODE    String?  @unique(map: "UQ__PEDIA_EM__FC44E107B32AE582") @db.VarChar(15)
+  PEEMPR_REPR    String?  @db.VarChar(60)
+  PEEMPR_URLA    String?  @db.VarChar(100)
+  PEEMPR_TOKE    String?  @db.VarChar(1000)
+  PEEMPR_EMAI    String?  @db.VarChar(50)
+  PEEMPR_ESTA    String?  @db.Char(1)
+  PEEMPR_ATEN    String?  @db.LongText
+  PEEMPR_VIAC    Int?
+  PEEMPR_VVAC    Int?
+  PEEMPR_MHLA    String?  @db.Text
+  PEEMPR_MHNL    String?  @db.Text
+  PEEMPR_CTSC    Int?
+  PEEMPR_OCAG    Int?
+  PEEMPR_SEWHAT  String   @default("\"\"") @db.VarChar(50)
+  PEEMPR_TOWHAT  String   @default("\"\"") @db.VarChar(1500)
+  PEEMPR_FIMENS  String   @default("\"\"") @db.VarChar(1500)
+  PEEMPR_URLW    String?  @db.VarChar(250)
+  PEEMPR_URLB    String?  @db.VarChar(250)
+  PEEMPR_WEBS    String?  @db.VarChar(250)
+  PEEMPR_BLIN    String?  @db.VarChar(250)
+  PEEMPR_SEWHATV String?  @db.VarChar(250)
+  PEEMPR_TOWHATV String?  @db.VarChar(1000)
+  PEEMPR_AGEESC  Int?
+  PEEMPR_ESCACT  Int?     @db.TinyInt
+  PEEMPR_ENCUEN  Int?
+  PEEMPR_ENCUVI  Int?
+  PEEMPR_NUENC   String?  @db.VarChar(15)
+  PEEMPR_ACENV   Boolean?
+  PEEMPR_NUHDB   Int?
+  PEEMPR_ACDB    Boolean?
+  PEEMPR_NUHDD   String?  @db.VarChar(15)
+  PEEMPR_ACDD    Boolean?
+  PEEMPR_HETC    Int?
+  PEEMPR_METC    Int?
+  PEEMPR_HEFC    Int?
+  PEEMPR_MEFC    Int?
+  PEEMPR_IMGE    String?  @db.LongText
+  PEEMPR_IMGC    String?  @db.LongText
+  PEEMPR_EMEW    Boolean?
+  PEEMPR_IMASI   Boolean?
+  PEEMPR_IMCSI   Boolean?
+  PEEMPR_TEXAT   String?  @db.Text
+  PEEMPR_TEXCT   String?  @db.Text
+  PEEMPR_SEVAR   String?  @db.VarChar(500)
+  PEEMPR_INEMP   Int?
+  PEEMPR_INENT   Int?
+  PEEMPR_METJ    Int?
+  PEEMPR_METSM   Int?
+  PEEMPR_METSS   Int?
+  PEEMPR_APIVER  Int?     @default(1) @db.TinyInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_ENBUG {
+  PEENBU_IDEN                                    Int           @id @default(autoincrement())
+  PEENBU_TITU                                    String?       @db.Text
+  PEENBU_DESC                                    String?       @db.Text
+  PEENBU_AUTO                                    Int?
+  PEENBU_STAT                                    Int?
+  PEENBU_CREA                                    DateTime?     @db.DateTime(0)
+  PEENBU_TICK                                    Int?
+  PEPROY_IDEN                                    Int?
+  PEETIQ_IDEN                                    Int?
+  PEENBU_ASIG                                    Int?
+  PEENBU_PART                                    String?       @db.LongText
+  PEENBU_ETIQ                                    String?       @db.Text
+  PEENBU_ADJU                                    String?       @db.Text
+  PEDIA_BIGDE                                    PEDIA_BIGDE[]
+  PEDIA_BUGPA                                    PEDIA_BUGPA[]
+  PEDIA_PROY                                     PEDIA_PROY?   @relation(fields: [PEPROY_IDEN], references: [PEPROY_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_ENBUG_ibfk_1")
+  SEDIA_CLAV_PEDIA_ENBUG_PEENBU_AUTOToSEDIA_CLAV SEDIA_CLAV?   @relation("PEDIA_ENBUG_PEENBU_AUTOToSEDIA_CLAV", fields: [PEENBU_AUTO], references: [SECLAV_CODI], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_ENBUG_ibfk_2")
+  SEDIA_CLAV_PEDIA_ENBUG_PEENBU_ASIGToSEDIA_CLAV SEDIA_CLAV?   @relation("PEDIA_ENBUG_PEENBU_ASIGToSEDIA_CLAV", fields: [PEENBU_ASIG], references: [SECLAV_CODI], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_ENBUG_ibfk_3")
+  PEDIA_ETIQ                                     PEDIA_ETIQ?   @relation(fields: [PEETIQ_IDEN], references: [PEETIQ_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_ENBUG_ibfk_4")
+
+  @@index([PEENBU_ASIG], map: "PEENBU_ASIG")
+  @@index([PEENBU_AUTO], map: "PEENBU_AUTO")
+  @@index([PEETIQ_IDEN], map: "PEETIQ_IDEN")
+  @@index([PEPROY_IDEN], map: "PEPROY_IDEN")
+}
+
+model PEDIA_EQUI {
+  PEEQUI_IDEN Int         @id
+  PEEQUI_IDTV String?     @db.VarChar(15)
+  PEEQUI_MCEQ String?     @db.VarChar(70)
+  PEEQUI_ESTA String?     @db.Char(1)
+  FECLIE_IDEN Int?
+  FEDIA_CLIE  FEDIA_CLIE? @relation(fields: [FECLIE_IDEN], references: [FECLIE_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "FK__PEDIA_EQU__FECLI__68487DD7")
+
+  @@index([FECLIE_IDEN], map: "FK__PEDIA_EQU__FECLI__68487DD7")
+}
+
+model PEDIA_ETAP {
+  PEETAP_IDEN Int      @id @default(autoincrement())
+  PEETAP_NOMB String?  @db.VarChar(255)
+  PEAREA_IDEN Int?
+  PEETAP_ESTA Boolean?
+}
+
+model PEDIA_ETIQ {
+  PEETIQ_IDEN  Int           @id @default(autoincrement())
+  PEETIQ_NOM   String?       @db.VarChar(50)
+  PEETIQ_COLOR String?       @db.VarChar(20)
+  PEETIQ_PRIO  Boolean?
+  PEETIQ_NIVE  Int?
+  PEETIQ_ESTA  Boolean?
+  PEDIA_ENBUG  PEDIA_ENBUG[]
+}
+
+model PEDIA_EVEN {
+  PEEVEN_IDEN  Int          @id @default(autoincrement())
+  PEEVEN_NOM   String?      @db.VarChar(255)
+  PEEVEN_ENCA  String?      @db.VarChar(255)
+  PEEVEN_FECH  DateTime?    @db.Date
+  PEEVEN_HORA  String?      @db.VarChar(50)
+  PEEVEN_LUGA  String?      @db.VarChar(255)
+  PEEVEN_AFOR  Int?
+  PEEVEN_SORTE Boolean?
+  PEDIA_ASIS   PEDIA_ASIS[]
+  PEDIA_MEEN   PEDIA_MEEN[]
+  PEDIA_SORT   PEDIA_SORT[]
+  PEDIA_TEME   PEDIA_TEME[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_FIRS {
+  PEFIRS_IDEN Int       @id @default(autoincrement())
+  FECLIE_IDEN Int?
+  SECLAV_CODI Int?
+  PEFIRS_FECE DateTime? @db.Date
+  PEFIRS_FECX DateTime? @db.Date
+  PEFIRS_PCED Bytes?
+  PEFIRS_PRUC Bytes?
+  PEFIRS_OBSR String?   @db.VarChar(1000)
+  PEFIRS_ESTA Boolean?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_HISTORY {
+  PEHIST_IDEN Int       @id @default(autoincrement())
+  PEHIST_TIPO String?   @db.VarChar(50)
+  PEHIST_ENTI Int?
+  PEHIST_ACCI String?   @db.VarChar(100)
+  PEHIST_ANTE String?   @db.Text
+  PEHIST_DESP String?   @db.Text
+  SECLAV_CODI Int?
+  PEHIST_CREA DateTime? @db.DateTime(0)
+  PEHIST_IP   String?   @db.VarChar(45)
+  PEHIST_DESC String?   @db.Text
+
+  @@index([PEHIST_ENTI], map: "idx_pedia_history_entidad")
+  @@index([PEHIST_CREA], map: "idx_pedia_history_fecha")
+  @@index([PEHIST_TIPO], map: "idx_pedia_history_tipo")
+  @@index([SECLAV_CODI], map: "idx_pedia_history_usuario")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_LABEL {
+  PELABL_IDEN      Int                @id @default(autoincrement())
+  PELABL_NOMB      String?            @db.VarChar(100)
+  PELABL_DESC      String?            @db.Text
+  PELABL_COLO      String?            @db.VarChar(50)
+  SECLAV_CODI      Int?
+  PELABL_CREA      DateTime?          @db.DateTime(0)
+  PELABL_ESTA      Int?               @default(1)
+  PELABL_GLOB      Int?               @default(0)
+  PEDIA_CARD_LABEL PEDIA_CARD_LABEL[]
+
+  @@index([PELABL_ESTA], map: "idx_pedia_label_estado")
+  @@index([PELABL_GLOB], map: "idx_pedia_label_global")
+  @@index([SECLAV_CODI], map: "idx_pedia_label_usuario")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_LIST {
+  PELIST_IDEN Int          @id @default(autoincrement())
+  PETABL_IDEN Int?
+  PELIST_NOMB String?      @db.MediumText
+  PELIST_DESC String?      @db.MediumText
+  PELIST_CREA DateTime?    @db.DateTime(0)
+  PELIST_ESTA Int?
+  PELIST_COLO String?      @db.VarChar(250)
+  PELIST_ORDE Int?         @default(0)
+  PEDIA_CARD  PEDIA_CARD[]
+  PEDIA_TABLE PEDIA_TABLE? @relation(fields: [PETABL_IDEN], references: [PETABL_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_LIST_ibfk_1")
+
+  @@index([PELIST_ESTA], map: "idx_pedia_list_estado")
+  @@index([PELIST_ORDE], map: "idx_pedia_list_orden")
+  @@index([PETABL_IDEN], map: "idx_pedia_list_tablero")
+}
+
+model PEDIA_MEEN {
+  PEMEEN_IDEN   Int         @id @default(autoincrement())
+  PEVEEN_IDEN   Int?
+  PEMEEN_INFEHO DateTime?   @db.DateTime(0)
+  PEMEEN_INMENS String?     @db.MediumText
+  PEMEEN_INIMAG Bytes?
+  PEMEEN_INACTI Boolean?
+  PEMEEN_REFEHO DateTime?   @db.DateTime(0)
+  PEMEEN_REMENS String?     @db.MediumText
+  PEMEEN_REIMAG String?     @db.LongText
+  PEMEEN_REACTI Boolean?
+  PEMEEN_FIFEHO DateTime?   @db.DateTime(0)
+  PEMEEN_FIMENS String?     @db.MediumText
+  PEMEEN_FIIMAG Bytes?
+  PEMEEN_FIACTI Boolean?
+  PEMEEN_SESION String?     @db.VarChar(100)
+  PEDIA_EVEN    PEDIA_EVEN? @relation(fields: [PEVEEN_IDEN], references: [PEEVEN_IDEN], onDelete: Cascade, onUpdate: Restrict, map: "PEDIA_MEEN_ibfk_1")
+
+  @@index([PEVEEN_IDEN], map: "PEVEEN_IDEN")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_NOTIFICATION {
+  PENOTI_IDEN Int       @id @default(autoincrement())
+  SECLAV_DEST Int?
+  SECLAV_ORIG Int?
+  PENOTI_TIPO String?   @db.VarChar(50)
+  PENOTI_TITU String?   @db.VarChar(255)
+  PENOTI_MENS String?   @db.Text
+  PENOTI_ENLA String?   @db.Text
+  PENOTI_ENTI String?   @db.VarChar(50)
+  PENOTI_EIDE Int?
+  PENOTI_CREA DateTime? @db.DateTime(0)
+  PENOTI_LEID DateTime? @db.DateTime(0)
+  PENOTI_ESTA Int?      @default(1)
+  PENOTI_PRIO Int?      @default(2)
+
+  @@index([SECLAV_DEST], map: "idx_pedia_notification_dest")
+  @@index([PENOTI_ESTA], map: "idx_pedia_notification_estado")
+  @@index([PENOTI_CREA], map: "idx_pedia_notification_fecha")
+  @@index([PENOTI_TIPO], map: "idx_pedia_notification_tipo")
+}
+
+model PEDIA_ORCL {
+  PEORCL_IDEN Int  @id @default(autoincrement())
+  PEORIN_IDEN Int?
+  SECLAV_CODI Int?
+}
+
+model PEDIA_ORIN {
+  PEORIN_IDEN Int          @id
+  PEORIN_NOMB String?      @unique(map: "UQ__PEDIA_OR__CEC88DE665A26D61") @db.VarChar(50)
+  PEORIN_ESTA String?      @db.Char(1)
+  PEORIN_VALU Int?
+  FEDIA_CITA  FEDIA_CITA[]
+  FEDIA_CONV  FEDIA_CONV[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_PREN {
+  PEPR_IDEN  Int          @id @default(autoincrement())
+  FEEC_IDEN  Int?
+  PEPR_DESC  String?      @db.VarChar(1000)
+  PETI_IDEN  Int?
+  PEPR_OBLI  Boolean?
+  PEPR_MULT  Boolean?
+  FEDIA_REDE FEDIA_REDE[]
+  FEDIA_ENCA FEDIA_ENCA?  @relation(fields: [FEEC_IDEN], references: [FEEC_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_PREN_ibfk_1")
+  PEDIA_TIPE PEDIA_TIPE?  @relation(fields: [PETI_IDEN], references: [PETI_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_PREN_ibfk_2")
+  PEDIA_REEN PEDIA_REEN[]
+
+  @@index([FEEC_IDEN], map: "FEEC_IDEN")
+  @@index([PETI_IDEN], map: "PETI_IDEN")
+}
+
+model PEDIA_PRES {
+  PEPRES_IDEN Int         @id @default(autoincrement())
+  PESORT_IDEN Int?
+  PEPRES_NOMB String?     @db.VarChar(255)
+  PEPRES_CANT Int?
+  PEPRES_GAND String?     @db.VarChar(500)
+  PEDIA_SORT  PEDIA_SORT? @relation(fields: [PESORT_IDEN], references: [PESORT_IDEN], onDelete: Cascade, onUpdate: Restrict, map: "PEDIA_PRES_ibfk_1")
+
+  @@index([PESORT_IDEN], map: "PESORT_IDEN")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_PROY {
+  PEPROY_IDEN Int           @id @default(autoincrement())
+  PEPROY_DESC String?       @db.Text
+  PEPROY_CREA DateTime?     @db.DateTime(0)
+  PEPROY_ESTA Boolean?
+  PEPROY_COLO String?       @db.VarChar(250)
+  PEPROY_ENCA Int?
+  PEPROY_NOMB String?       @db.VarChar(500)
+  PEDIA_ENBUG PEDIA_ENBUG[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_REEN {
+  PERE_IDEN  Int         @id @default(autoincrement())
+  PERE_DESC  String?     @db.VarChar(1000)
+  PERE_VALO  String?     @db.VarChar(1000)
+  PERE_ESTA  Boolean?
+  PETI_IDEN  Int?
+  PEPR_IDEN  Int?
+  PEDIA_PREN PEDIA_PREN? @relation(fields: [PEPR_IDEN], references: [PEPR_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_REEN_ibfk_1")
+  PEDIA_TIPE PEDIA_TIPE? @relation(fields: [PETI_IDEN], references: [PETI_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "PEDIA_REEN_ibfk_2")
+
+  @@index([PEPR_IDEN], map: "PEPR_IDEN")
+  @@index([PETI_IDEN], map: "PETI_IDEN")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_REPOR {
+  PEREP_IDEN   Int      @id @default(autoincrement())
+  PECTREP_IDEN Int?
+  PEREP_DESC   String?  @db.VarChar(1000)
+  PEREP_VALO   String?  @db.VarChar(1000)
+  PEREP_CONDI  String?  @db.VarChar(1000)
+  PEREP_ESTA   Boolean?
+}
+
+model PEDIA_RESP {
+  PERESP_IDEN Int         @id @default(autoincrement())
+  PERESP_RESP String?     @db.Text
+  PEAREA_IDEN Int?
+  PEDIA_AREA  PEDIA_AREA? @relation(fields: [PEAREA_IDEN], references: [PEAREA_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "FK_PEDIA_RESP_AREA")
+
+  @@index([PEAREA_IDEN], map: "FK_PEDIA_RESP_AREA")
+}
+
+model PEDIA_SORT {
+  PESORT_IDEN   Int          @id @default(autoincrement())
+  PEVEEN_IDEN   Int?
+  PESORT_NOMB   String?      @db.VarChar(255)
+  PESORT_FECH   DateTime?    @db.Date
+  PESORT_HORA   DateTime?    @db.Time(0)
+  PESORT_IMPR   String?      @db.VarChar(255)
+  PESORT_APIKEY String?      @db.VarChar(255)
+  PESORT_MENS   String?      @db.Text
+  PEDIA_PRES    PEDIA_PRES[]
+  PEDIA_EVEN    PEDIA_EVEN?  @relation(fields: [PEVEEN_IDEN], references: [PEEVEN_IDEN], onDelete: Cascade, onUpdate: Restrict, map: "PEDIA_SORT_ibfk_1")
+
+  @@index([PEVEEN_IDEN], map: "PEVEEN_IDEN")
+}
+
+model PEDIA_SUCARD {
+  PESUCA_IDEN  Int       @id @default(autoincrement())
+  PESUCA_DESCR String?   @db.VarChar(1000)
+  PESUCA_ESTA  Boolean?
+  PESUCA_ORDEN Int?
+  PESUCA_VALO  Int?
+  PECARD_IDEN  Int?
+  UPDATE_AT    DateTime? @default(now()) @db.DateTime(0)
+  SECLAV_CODI  Int?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_TABLE {
+  PETABL_IDEN Int          @id @default(autoincrement())
+  PETABL_NOMB String?      @db.MediumText
+  PETABL_DESC String?      @db.MediumText
+  PETABL_CREA DateTime?    @db.DateTime(0)
+  SECLAV_CODI Int?
+  PETABL_ESTA Int?
+  PETABL_COLO String?      @db.VarChar(250)
+  PETABL_ETIQ Int?
+  PETABL_COMP Int?
+  PETABL_USLI String?      @db.MediumText
+  PEDIA_LIST  PEDIA_LIST[]
+
+  @@index([PETABL_COMP], map: "idx_pedia_table_compartido")
+  @@index([PETABL_ESTA], map: "idx_pedia_table_estado")
+  @@index([SECLAV_CODI], map: "idx_pedia_table_usuario")
+}
+
+model PEDIA_TARE {
+  PETARE_IDEN  Int          @id @default(autoincrement())
+  PETARE_NOM   String?      @db.VarChar(50)
+  PETARE_COLOR String?      @db.VarChar(20)
+  PETARE_ESTA  Boolean?
+  FEDIA_CITA   FEDIA_CITA[]
+}
+
+model PEDIA_TEME {
+  PETEME_IDEN Int         @id @default(autoincrement())
+  PEEVEN_IDEN Int?
+  PETEME_DESC String?     @db.VarChar(500)
+  PETEME_PONE String?     @db.VarChar(255)
+  PETEME_HORA DateTime?   @db.Time(0)
+  PEDIA_EVEN  PEDIA_EVEN? @relation(fields: [PEEVEN_IDEN], references: [PEEVEN_IDEN], onDelete: Cascade, onUpdate: Restrict, map: "PEDIA_TEME_ibfk_1")
+
+  @@index([PEEVEN_IDEN], map: "PEEVEN_IDEN")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_TEMPLATE {
+  PETEMP_IDEN Int       @id @default(autoincrement())
+  PETEMP_NOMB String?   @db.VarChar(255)
+  PETEMP_DESC String?   @db.Text
+  PETEMP_JSON String?   @db.LongText
+  PETEMP_CATE String?   @db.VarChar(100)
+  SECLAV_CODI Int?
+  PETEMP_CREA DateTime? @db.DateTime(0)
+  PETEMP_ACTU DateTime? @db.DateTime(0)
+  PETEMP_ESTA Int?      @default(1)
+  PETEMP_PUBL Int?      @default(0)
+  PETEMP_USES Int?      @default(0)
+
+  @@index([PETEMP_CATE], map: "idx_pedia_template_categoria")
+  @@index([PETEMP_PUBL], map: "idx_pedia_template_publico")
+  @@index([PETEMP_USES], map: "idx_pedia_template_usos")
+  @@index([SECLAV_CODI], map: "idx_pedia_template_usuario")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_TIEN {
+  PETI_IDEN  Int          @id @default(autoincrement())
+  PETI_DESC  String?      @db.VarChar(1000)
+  PETI_COLOR String?      @db.VarChar(50)
+  PEPR_ESTA  Boolean?
+  FEDIA_ENCA FEDIA_ENCA[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_TIPE {
+  PETI_IDEN  Int          @id @default(autoincrement())
+  PETI_DESC  String?      @db.VarChar(1000)
+  PETI_COLOR String?      @db.VarChar(50)
+  PEPR_ESTA  Boolean?
+  PEDIA_PREN PEDIA_PREN[]
+  PEDIA_REEN PEDIA_REEN[]
+}
+
+model PEDIA_VIAD {
+  PEVIAD_IDEN Int     @id @default(autoincrement())
+  PEVISI_IDEN Int?
+  PEVIAD_URL  String? @db.VarChar(255)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDIA_VISI {
+  PEVISI_IDEN  Int        @id @default(autoincrement())
+  PEVISI_FECH  DateTime?  @db.DateTime(0)
+  PEVISI_HOIN  DateTime?  @db.Time(0)
+  PEVISI_HOFI  DateTime?  @db.Time(0)
+  PEVISI_ETAP  Int?
+  PEVISI_NUFA  Int?
+  PEVISI_USUA  String?    @db.VarChar(50)
+  PEVISI_WHAT  Int?
+  PEVISI_WHJE  Int?
+  PEVISI_CALI  Int?
+  PEVISI_CONC  String?    @db.VarChar(1200)
+  PEVISI_EMPE  String?    @db.VarChar(250)
+  PEVISI_ESCA  Boolean?
+  PEVISI_IMGS  Boolean?
+  PEVISI_LATE  String?    @db.LongText
+  PEVISI_ESTA  String?    @db.Text
+  PEVISI_HORAS Int?
+  PEVISI_ADJU  String?    @db.VarChar(1200)
+  PEVISI_TIPOV String?    @db.VarChar(50)
+  PEVISI_RUCU  String?    @db.VarChar(15)
+  FECLIE_IDEN  Int
+  SECLAV_CODI  Int
+  PEVISI_REVA  String?    @default("0") @db.VarChar(1)
+  PEVISI_IDPC  Int?
+  PEVISI_OBCL  String?    @db.Text
+  PEVISI_MENC  String?    @default("") @db.VarChar(1000)
+  PEVISI_CIUD  String?    @db.VarChar(1200)
+  PEPROY_IDEN  Int?       @default(6)
+  FEDIA_CLIE   FEDIA_CLIE @relation(fields: [FECLIE_IDEN], references: [FECLIE_IDEN], onUpdate: Restrict, map: "PEDIA_VISI_ibfk_1")
+  SEDIA_CLAV   SEDIA_CLAV @relation(fields: [SECLAV_CODI], references: [SECLAV_CODI], onUpdate: Restrict, map: "PEDIA_VISI_ibfk_2")
+
+  @@index([FECLIE_IDEN], map: "FECLIE_IDEN")
+  @@index([SECLAV_CODI], map: "SECLAV_CODI")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model PEDI_PKIS {
+  PKIS_IDEN   Int       @id @default(autoincrement())
+  SECLAV_CODI Int?
+  PKIS_FECHA  DateTime? @db.DateTime(0)
+  PKIS_NOTA   Float?    @db.Float
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model SEDIA_CARG {
+  SEDCA_IDEN  Int        @id @default(autoincrement())
+  SECLAV_CODI Int
+  PECAR_IDEN  Int
+  PEDIA_CARG  PEDIA_CARG @relation(fields: [PECAR_IDEN], references: [PECAR_IDEN], map: "fk_sedia_carg_carg")
+  SEDIA_CLAV  SEDIA_CLAV @relation(fields: [SECLAV_CODI], references: [SECLAV_CODI], map: "fk_sedia_carg_clav")
+
+  @@index([PECAR_IDEN], map: "fk_sedia_carg_carg")
+  @@index([SECLAV_CODI], map: "fk_sedia_carg_clav")
+}
+
+model SEDIA_CLAV {
+  SECLAV_CODI                                     Int                @id
+  FEEMPL_CEDU                                     String?            @unique(map: "UQ__SEDIA_CL__1C19E55E25ACD90A") @db.VarChar(13)
+  SECLAV_USUA                                     String?            @db.VarChar(60)
+  SECLAV_CLAV                                     String?            @db.VarChar(500)
+  SECLAV_TIPO                                     String?            @db.Char(1)
+  SECLAV_ESTA                                     Boolean?
+  SECLAV_ACTI                                     Boolean?
+  PEAREA_IDEN                                     Int?
+  SECLAV_TELF                                     Int?
+  SECLAV_NOMB                                     String?            @db.VarChar(250)
+  SECLAV_APEL                                     String?            @db.VarChar(250)
+  SECLAV_NIVA                                     String?            @db.VarChar(250)
+  SECLAV_NIVE                                     Int?
+  FEDIA_CITA                                      FEDIA_CITA[]
+  FEDIA_CONV                                      FEDIA_CONV[]
+  FEDIA_DCNV                                      FEDIA_DCNV[]
+  PEDIA_ACTRA_PEDIA_ACTRA_SECLAV_CODIToSEDIA_CLAV PEDIA_ACTRA[]      @relation("PEDIA_ACTRA_SECLAV_CODIToSEDIA_CLAV")
+  PEDIA_ACTRA_PEDIA_ACTRA_SECLAV_ASIGToSEDIA_CLAV PEDIA_ACTRA[]      @relation("PEDIA_ACTRA_SECLAV_ASIGToSEDIA_CLAV")
+  PEDIA_BIGDE                                     PEDIA_BIGDE[]
+  PEDIA_BUGPA                                     PEDIA_BUGPA[]
+  PEDIA_DOCU_PEDIA_DOCU_SECLAV_ENVIToSEDIA_CLAV   PEDIA_DOCU[]       @relation("PEDIA_DOCU_SECLAV_ENVIToSEDIA_CLAV")
+  PEDIA_DOCU_PEDIA_DOCU_SECLAV_RECIToSEDIA_CLAV   PEDIA_DOCU[]       @relation("PEDIA_DOCU_SECLAV_RECIToSEDIA_CLAV")
+  PEDIA_DOCU_COPIA                                PEDIA_DOCU_COPIA[]
+  PEDIA_DUSU                                      PEDIA_DUSU[]
+  PEDIA_ENBUG_PEDIA_ENBUG_PEENBU_AUTOToSEDIA_CLAV PEDIA_ENBUG[]      @relation("PEDIA_ENBUG_PEENBU_AUTOToSEDIA_CLAV")
+  PEDIA_ENBUG_PEDIA_ENBUG_PEENBU_ASIGToSEDIA_CLAV PEDIA_ENBUG[]      @relation("PEDIA_ENBUG_PEENBU_ASIGToSEDIA_CLAV")
+  PEDIA_VISI                                      PEDIA_VISI[]
+  SEDIA_CARG                                      SEDIA_CARG[]
+  SEDIA_NOTI_SEDIA_NOTI_SEDIA_CLAEToSEDIA_CLAV    SEDIA_NOTI[]       @relation("SEDIA_NOTI_SEDIA_CLAEToSEDIA_CLAV")
+  SEDIA_NOTI_SEDIA_NOTI_SEDIA_CLARToSEDIA_CLAV    SEDIA_NOTI[]       @relation("SEDIA_NOTI_SEDIA_CLARToSEDIA_CLAV")
+  SEDIA_PRUS                                      SEDIA_PRUS[]
+}
+
+model SEDIA_CONAS {
+  SECONA_IDEN Int  @id @default(autoincrement())
+  SECOND_IDEN Int?
+  SEDIA_CLAV  Int?
+}
+
+model SEDIA_CONFIG {
+  SECOND_IDEN Int     @id @default(autoincrement())
+  SECOND_DESC String? @db.VarChar(600)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model SEDIA_FIRM {
+  SEFIRM_IDEN Int      @id @default(autoincrement())
+  SEFIRM_NOSE String?  @db.VarChar(1000)
+  SEFIRM_HORA String?  @db.VarChar(1000)
+  SEFIRM_MINU String?  @db.VarChar(1000)
+  SEFIRM_ANTE Int?
+  SEFIRM_DESP Int?
+  SEFIRM_TXPC String?  @db.VarChar(1000)
+  SEFIRM_TXCA String?  @db.VarChar(1000)
+  SEFIRM_ENAC Boolean?
+  SEFIRM_IMGC String?  @db.LongText
+  SEFIRM_IMGP String?  @db.LongText
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model SEDIA_NOTI {
+  SENOF_IDEN                                   Int         @id @default(autoincrement())
+  SENOF_TITU                                   String      @db.VarChar(1000)
+  SENOF_MENS                                   String      @db.VarChar(1000)
+  SENOF_LEID                                   Boolean
+  SEDIA_CLAE                                   Int?
+  SEDIA_CLAR                                   Int?
+  SENOF_TIPO                                   Int?
+  SENOF_FECH                                   DateTime?   @db.Date
+  SEDIA_CLAV_SEDIA_NOTI_SEDIA_CLAEToSEDIA_CLAV SEDIA_CLAV? @relation("SEDIA_NOTI_SEDIA_CLAEToSEDIA_CLAV", fields: [SEDIA_CLAE], references: [SECLAV_CODI], onDelete: Restrict, onUpdate: Restrict, map: "FK_SEDIA_NOTI_SEDIA_CLAE")
+  SEDIA_CLAV_SEDIA_NOTI_SEDIA_CLARToSEDIA_CLAV SEDIA_CLAV? @relation("SEDIA_NOTI_SEDIA_CLARToSEDIA_CLAV", fields: [SEDIA_CLAR], references: [SECLAV_CODI], onDelete: Restrict, onUpdate: Restrict, map: "FK_SEDIA_NOTI_SEDIA_CLAR")
+
+  @@index([SEDIA_CLAE], map: "FK_SEDIA_NOTI_SEDIA_CLAE")
+  @@index([SEDIA_CLAR], map: "FK_SEDIA_NOTI_SEDIA_CLAR")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model SEDIA_PRIV {
+  SEPRIV_IDEN Int          @id @default(autoincrement())
+  SEPRIV_NOMB String?      @db.Text
+  SEPRIV_ESTA Boolean?
+  SEDIA_PRUS  SEDIA_PRUS[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model SEDIA_PRUS {
+  SEPRUS_IDEN Int         @id @default(autoincrement())
+  SEPRIV_IDEN Int?
+  SECLAV_CODI Int?
+  SEDIA_PRIV  SEDIA_PRIV? @relation(fields: [SEPRIV_IDEN], references: [SEPRIV_IDEN], onDelete: Restrict, onUpdate: Restrict, map: "fk_prus_priv")
+  SEDIA_CLAV  SEDIA_CLAV? @relation(fields: [SECLAV_CODI], references: [SECLAV_CODI], onDelete: Restrict, onUpdate: Restrict, map: "fk_prus_seclav")
+
+  @@index([SEPRIV_IDEN], map: "fk_prus_priv")
+  @@index([SECLAV_CODI], map: "fk_prus_seclav")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model SEDIA_VISI {
+  SEVISI_IDEN Int      @id @default(autoincrement())
+  SEVISI_NOSE String?  @db.VarChar(1000)
+  SEVISI_TXAA String?  @db.VarChar(1000)
+  SEVISI_TXAC String?  @db.VarChar(1000)
+  SEVISI_IAAA Boolean?
+  SEVISI_IAAC Boolean?
+  SEVISI_IMAA String?  @db.LongText
+  SEVISI_IMAC String?  @db.LongText
+  SEVISI_TXUA String?  @db.VarChar(1000)
+  SEVISI_TXUC String?  @db.VarChar(1000)
+  SEVISI_IUAA Boolean?
+  SEVISI_IUAC Boolean?
+  SEVISI_IMUA String?  @db.LongText
+  SEVISI_IMUC String?  @db.LongText
+  SEVISI_TXFU String?  @db.VarChar(1000)
+  SEVISI_TXFC String?  @db.VarChar(1000)
+  SEVISI_IAFU Boolean?
+  SEVISI_IAFC Boolean?
+  SEVISI_IMFU String?  @db.LongText
+  SEVISI_IMFC String?  @db.LongText
+  SEVISI_TXCA String?  @db.VarChar(1000)
+  SEVISI_TXCC String?  @db.VarChar(1000)
+  SEVISI_IACA Boolean?
+  SEVISI_IACC Boolean?
+  SEVISI_IMCA String?  @db.LongText
+  SEVISI_IMCC String?  @db.LongText
+}
+
+enum PEDIA_DOCU_PEDOCU_ESTA {
+  enviado
+  recibido
+  borrador
+}
+
+enum PEDIA_DOCU_PEDOCU_READ {
+  leido
+  no_leido
+}

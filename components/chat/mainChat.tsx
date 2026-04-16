@@ -3,64 +3,31 @@
 import { useState, useRef, useEffect } from "react"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
-
-const initialMessages = [
-  {
-    id: 1,
-    message: "Hola",
-    userId: 1,
-    user: "Maujin",
-    hora: "10:00 AM",
-    tipo: "TXT",
-  },
-  {
-    id: 2,
-    message: "Hola, En que lo puedo ayudar?",
-    userId: 2,
-    user: "Soporte",
-    hora: "10:00 AM",
-    tipo: "TXT",
-  },
-  {
-    id: 3,
-    message: "Hola buen dia, tengo problemas con mi internet",
-    userId: 1,
-    user: "Maujin",
-    hora: "10:00 AM",
-    tipo: "TXT",
-  },
-  {
-    id: 4,
-    message: "Tiene alguna fotografia",
-    userId: 2,
-    user: "Soporte",
-    hora: "10:00 AM",
-    tipo: "TXT",
-  },
-  {
-    id: 5,
-    message: "Si, aqui se la envio",
-    userId: 1,
-    user: "Maujin",
-    hora: "10:00 AM",
-    tipo: "TXT",
-  },
-  {
-    id: 6,
-    message: "https://via.placeholder.com/150",
-    userId: 1,
-    user: "Maujin",
-    hora: "10:00 AM",
-    tipo: "IMG",
-  },
-]
+import { Message } from "@/interfaces"
 
 const CURRENT_USER = 1
 
-export function MainChat() {
-  const [messages, setMessages] = useState(initialMessages)
+type Props = {
+  messages?: Message[]
+  selectedTicket?: any
+  loading?: boolean
+}
+
+export function MainChat({
+  messages: externalMessages,
+  selectedTicket,
+  loading,
+}: Props) {
+  const [messages, setMessages] = useState<Message[]>(externalMessages || [])
   const [text, setText] = useState("")
   const bottomRef = useRef<HTMLDivElement>(null)
+
+  // Actualizar mensajes cuando cambien los mensajes externos
+  useEffect(() => {
+    if (externalMessages) {
+      setMessages(externalMessages)
+    }
+  }, [externalMessages])
 
   const sendMessage = () => {
     if (!text.trim()) return
@@ -84,42 +51,58 @@ export function MainChat() {
 
   return (
     <div className="flex w-full flex-col gap-2">
-      <div className="flex h-[calc(100vh-6rem)] w-full flex-col rounded-md bg-zinc-900">
+      <div className="flex h-[calc(100vh-4rem)] w-full flex-col rounded-md bg-card">
         {/* LISTA DE MENSAJES */}
         <div className="flex-1 space-y-3 overflow-y-auto p-4">
-          {messages.map((msg) => {
-            const isMe = msg.userId === CURRENT_USER
+          {loading ? (
+            <div className="flex h-full items-center justify-center">
+              <p className="text-muted-foreground">Cargando conversación...</p>
+            </div>
+          ) : messages.length === 0 ? (
+            <div className="flex h-full items-center justify-center">
+              <p className="text-muted-foreground">
+                {selectedTicket
+                  ? "No hay mensajes en esta conversación"
+                  : "Selecciona un ticket para ver la conversación"}
+              </p>
+            </div>
+          ) : (
+            <>
+              {messages.map((msg) => {
+                const isMe = msg.userId == CURRENT_USER
 
-            return (
-              <div
-                key={msg.id}
-                className={`flex w-full ${
-                  isMe ? "justify-end" : "justify-start"
-                }`}
-              >
-                <div
-                  className={`max-w-xs rounded-xl p-3 text-sm shadow-md ${
-                    isMe ? "bg-black text-white" : "bg-gray-200 text-black"
-                  }`}
-                >
-                  <div className="mb-1 text-xs opacity-70">
-                    {msg.user} • {msg.hora}
+                return (
+                  <div
+                    key={msg.id}
+                    className={`flex w-full ${
+                      isMe ? "justify-end" : "justify-start"
+                    }`}
+                  >
+                    <div
+                      className={`max-w-xs rounded-xl p-3 text-sm shadow-md ${
+                        isMe ? "bg-black text-white" : "bg-gray-200 text-black"
+                      }`}
+                    >
+                      <div className="mb-1 text-xs opacity-70">
+                        {msg.user} • {msg.hora}
+                      </div>
+
+                      {msg.tipo === "TXT" ? (
+                        <p>{msg.message}</p>
+                      ) : (
+                        <img
+                          src={msg.message}
+                          alt="img"
+                          className="max-h-40 rounded-md"
+                        />
+                      )}
+                    </div>
                   </div>
-
-                  {msg.tipo === "TXT" ? (
-                    <p>{msg.message}</p>
-                  ) : (
-                    <img
-                      src={msg.message}
-                      alt="img"
-                      className="max-h-40 rounded-md"
-                    />
-                  )}
-                </div>
-              </div>
-            )
-          })}
-          <div ref={bottomRef} />
+                )
+              })}
+              <div ref={bottomRef} />
+            </>
+          )}
         </div>
 
         {/* INPUT */}

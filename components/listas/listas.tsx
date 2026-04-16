@@ -38,20 +38,20 @@ export function Listas({
   priorities,
 }: ListProps) {
   return (
-    <ScrollArea>
+    <ScrollArea className="h-[calc(100vh-14rem)]">
       <ItemGroup>
         {ItemListData.map((item) => {
           const priority = priorities.find((p) => p.id === item.priorityId)
-          const borderColor = priority
-            ? priority.color.replace("bg-", "border-")
-            : "border-border"
 
           return (
             <ContextMenu key={item.id}>
               <ContextMenuTrigger asChild>
                 <Item
                   variant="outline"
-                  className={`cursor-pointer hover:border-transparent hover:bg-muted/50 shadow-sm border-l-4 ${borderColor}`}
+                  className="cursor-pointer border-l-4 shadow-sm hover:border-transparent hover:bg-muted/50"
+                  style={{
+                    borderLeftColor: priority?.color || "#d1d5db",
+                  }}
                   onClick={() => ListAction(item.id)}
                 >
                   <ItemMedia variant="icon">
@@ -68,23 +68,23 @@ export function Listas({
                     <BotonMenuActions actions={actions} item={item} />
                   </ItemActions>
                 </Item>
-            </ContextMenuTrigger>
-            <ContextMenuContent className="w-48">
-              <ContextMenuGroup>
-                {actions.map((action) => (
-                  <ContextMenuItem
-                    key={action.id}
-                    onClick={() => action.action(item.id)}
-                  >
-                    {action.icon && <action.icon />}
-                    {action.title}
-                  </ContextMenuItem>
-                ))}
-              </ContextMenuGroup>
-            </ContextMenuContent>
-          </ContextMenu>
-        )
-      })}
+              </ContextMenuTrigger>
+              <ContextMenuContent className="w-48">
+                <ContextMenuGroup>
+                  {actions.map((action) => (
+                    <ContextMenuItem
+                      key={action.id}
+                      onClick={() => action.action(item.id)}
+                    >
+                      {action.icon && <action.icon />}
+                      {action.title}
+                    </ContextMenuItem>
+                  ))}
+                </ContextMenuGroup>
+              </ContextMenuContent>
+            </ContextMenu>
+          )
+        })}
       </ItemGroup>
     </ScrollArea>
   )
